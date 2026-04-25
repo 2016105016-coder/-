@@ -20,26 +20,18 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - name: Find Gradle wrapper
-        run: |
-          echo "Ищу файл gradlew..."
-          PROJECT_DIR=$(dirname "$(find . -name gradlew -type f | head -n 1)")
-          if [ -z "$PROJECT_DIR" ] || [ "$PROJECT_DIR" = "." ]; then
-            echo "gradlew не найден. Показываю структуру файлов:"
-            find . -maxdepth 4 -type f
-            exit 1
-          fi
-          echo "Gradle project found in: $PROJECT_DIR"
-          echo "PROJECT_DIR=$PROJECT_DIR" >> $GITHUB_ENV
-          chmod +x "$PROJECT_DIR/gradlew"
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.7'
 
       - name: Build APK
         run: |
-          cd "$PROJECT_DIR"
-          ./gradlew assembleDebug
+          cd alias_obshestvoznanie_10
+          gradle assembleDebug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: app-debug-apk
-          path: '**/app/build/outputs/apk/debug/*.apk'
+          path: alias_obshestvoznanie_10/app/build/outputs/apk/debug/*.apk
