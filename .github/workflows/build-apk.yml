@@ -6,29 +6,91 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+
 jobs:
   build:
+    name: Build APK
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout project
         uses: actions/checkout@v4
 
-      - name: Set up Java
+      - name: Set up Java 17
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '17'
 
-      - name: Set up Gradle
+      - name: Set up Gradle 8.13
         uses: gradle/actions/setup-gradle@v4
         with:
-          gradle-version: '8.7'
+          gradle-version: '8.13'
+
+      - name: Show project files
+        run: |
+          echo "Проверяем структуру проекта"
+          ls -la
+          echo "Проверяем папку приложения"
+          ls -la alias_obshestvoznanie_10
+          echo "Проверяем папку app"
+          ls -la alias_obshestvoznanie_10/app
 
       - name: Build APK
         run: |
           cd alias_obshestvoznanie_10
-          gradle assembleDebug
+          gradle assembleDebug --no-daemon --stacktrace
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-debug-apk
+          path: alias_obshestvoznanie_10/app/build/outputs/apk/debug/*.apkname: Build Android APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v4
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Gradle 8.13
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.13'
+
+      - name: Show project files
+        run: |
+          echo "Проверяем структуру проекта"
+          ls -la
+          echo "Проверяем папку приложения"
+          ls -la alias_obshestvoznanie_10
+          echo "Проверяем папку app"
+          ls -la alias_obshestvoznanie_10/app
+
+      - name: Build APK
+        run: |
+          cd alias_obshestvoznanie_10
+          gradle assembleDebug --no-daemon --stacktrace
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
