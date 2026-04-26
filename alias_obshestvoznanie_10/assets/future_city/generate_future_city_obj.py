@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate a simple futuristic city OBJ model with skyscrapers, parks and flying cars."""
+"""Generate a futuristic city OBJ model with parks, ponds, skyscrapers and flying cars."""
 
 from __future__ import annotations
 
@@ -106,6 +106,12 @@ def build_city(seed: int = 42) -> ObjBuilder:
 
             if park:
                 obj.add_box(x, y, width=14, depth=14, height=0.4, material="park", base_z=0)
+                if rng.random() < 0.65:
+                    pond_w = rng.uniform(4.5, 7.5)
+                    pond_d = rng.uniform(3.5, 6.5)
+                    pond_x = x + rng.uniform(-2.0, 2.0)
+                    pond_y = y + rng.uniform(-2.0, 2.0)
+                    obj.add_box(pond_x, pond_y, width=pond_w, depth=pond_d, height=0.15, material="pond", base_z=0.41)
                 # Trees as small columns
                 for _ in range(4):
                     tx = x + rng.uniform(-5.0, 5.0)
@@ -118,12 +124,21 @@ def build_city(seed: int = 42) -> ObjBuilder:
                     ty = y + rng.uniform(-4.0, 4.0)
                     width = rng.uniform(3.5, 7.0)
                     depth = rng.uniform(3.5, 7.0)
-                    height = rng.uniform(18.0, 54.0)
+                    height = rng.uniform(22.0, 72.0)
                     obj.add_box(tx, ty, width=width, depth=depth, height=height, material="tower")
 
                     # Rooftop heli/aircar pad
                     if height > 30:
                         obj.add_hex_pad(tx, ty, radius=min(width, depth) * 0.4, z=height + 0.05, material="pad")
+
+    # Landmark megatowers in the center
+    for tx, ty, h, w in [
+        (-10, -8, 96.0, 9.5),
+        (12, -5, 112.0, 8.7),
+        (4, 14, 88.0, 10.2),
+    ]:
+        obj.add_box(tx, ty, width=w, depth=w * 0.9, height=h, material="tower")
+        obj.add_hex_pad(tx, ty, radius=w * 0.3, z=h + 0.05, material="pad")
 
     # Elevated sky lanes
     for lane_y in (-28, 0, 28):
@@ -136,6 +151,8 @@ def build_city(seed: int = 42) -> ObjBuilder:
         (18, 28, 31.0),
         (52, 0, 30.7),
         (34, -28, 30.9),
+        (-68, 28, 30.6),
+        (70, -28, 31.1),
     ]
     for cx, cy, cz in car_positions:
         obj.add_box(cx, cy, width=3.2, depth=1.4, height=0.8, material="car", base_z=cz)
@@ -161,6 +178,11 @@ newmtl park
 Kd 0.18 0.45 0.22
 Ka 0.05 0.15 0.06
 Ks 0.05 0.10 0.05
+
+newmtl pond
+Kd 0.28 0.62 0.88
+Ka 0.08 0.14 0.22
+Ks 0.55 0.65 0.75
 
 newmtl tree
 Kd 0.10 0.35 0.10
