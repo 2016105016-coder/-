@@ -1,0 +1,40 @@
+# Futuristic city materials
+newmtl ground
+Kd 0.10 0.10 0.13
+Ka 0.03 0.03 0.04
+Ks 0.05 0.05 0.05
+
+newmtl tower
+Kd 0.45 0.52 0.62
+Ka 0.12 0.14 0.18
+Ks 0.35 0.35 0.40
+
+newmtl park
+Kd 0.18 0.45 0.22
+Ka 0.05 0.15 0.06
+Ks 0.05 0.10 0.05
+
+newmtl tree
+Kd 0.10 0.35 0.10
+Ka 0.04 0.10 0.04
+Ks 0.03 0.05 0.03
+
+newmtl sky_lane
+Kd 0.20 0.28 0.36
+Ka 0.06 0.08 0.10
+Ks 0.25 0.30 0.35
+
+newmtl car
+Kd 0.85 0.25 0.25
+Ka 0.20 0.06 0.06
+Ks 0.50 0.40 0.40
+
+newmtl glass
+Kd 0.55 0.75 0.90
+Ka 0.10 0.14 0.18
+Ks 0.60 0.65 0.70
+
+newmtl pad
+Kd 0.95 0.85 0.20
+Ka 0.20 0.16 0.05
+Ks 0.35 0.30 0.10

@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Город будущего — 3D превью</title>
+  <style>
+    html, body { margin: 0; height: 100%; background: #070b12; color: #dbe7ff; font-family: Arial, sans-serif; }
+    #app { position: fixed; inset: 0; }
+    .hud {
+      position: fixed;
+      top: 12px;
+      left: 12px;
+      background: rgba(10, 14, 25, 0.75);
+      border: 1px solid rgba(140, 165, 255, 0.3);
+      border-radius: 10px;
+      padding: 10px 12px;
+      max-width: 360px;
+      backdrop-filter: blur(4px);
+      line-height: 1.35;
+      font-size: 14px;
+    }
+    code { color: #a8cbff; }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+  <div class="hud">
+    <strong>3D-модель: город будущего</strong><br/>
+    ЛКМ — вращение, колёсико — приближение, ПКМ — панорама.<br/>
+    Если модель не видна, запускай страницу через локальный сервер.
+  </div>
+
+  <script type="module">
+    import * as THREE from 'https://unpkg.com/three@0.164.1/build/three.module.js';
+    import { OrbitControls } from 'https://unpkg.com/three@0.164.1/examples/jsm/controls/OrbitControls.js';
+    import { MTLLoader } from 'https://unpkg.com/three@0.164.1/examples/jsm/loaders/MTLLoader.js';
+    import { OBJLoader } from 'https://unpkg.com/three@0.164.1/examples/jsm/loaders/OBJLoader.js';
+
+    const container = document.getElementById('app');
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x070b12);
+    scene.fog = new THREE.Fog(0x070b12, 70, 260);
+
+    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1200);
+    camera.position.set(130, 95, 130);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    container.appendChild(renderer.domElement);
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.target.set(0, 18, 0);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.06;
+
+    scene.add(new THREE.AmbientLight(0x8ca0ff, 0.45));
+
+    const keyLight = new THREE.DirectionalLight(0xdde6ff, 1.2);
+    keyLight.position.set(80, 120, 60);
+    scene.add(keyLight);
+
+    const rimLight = new THREE.DirectionalLight(0x4ca8ff, 0.45);
+    rimLight.position.set(-100, 80, -50);
+    scene.add(rimLight);
+
+    const grid = new THREE.GridHelper(200, 20, 0x385080, 0x24344f);
+    grid.position.y = 0.01;
+    scene.add(grid);
+
+    const mtlLoader = new MTLLoader();
+    mtlLoader.load('./future_city.mtl', (materials) => {
+      materials.preload();
+      const objLoader = new OBJLoader();
+      objLoader.setMaterials(materials);
+      objLoader.load('./future_city.obj', (object) => {
+        object.traverse((child) => {
+          if (child.isMesh) {
+            child.castShadow = false;
+            child.receiveShadow = false;
+          }
+        });
+        scene.add(object);
+      });
+    });
+
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    function animate() {
+      requestAnimationFrame(animate);
+      controls.update();
+      renderer.render(scene, camera);
+    }
+    animate();
+  </script>
+</body>
+</html>
