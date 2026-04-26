@@ -5,14 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Город будущего — 3D превью</title>
   <style>
-    html, body { margin: 0; height: 100%; background: #070b12; color: #dbe7ff; font-family: Arial, sans-serif; }
+    html, body { margin: 0; height: 100%; background: #8ac6ff; color: #10243f; font-family: Arial, sans-serif; }
     #app { position: fixed; inset: 0; }
     .hud {
       position: fixed;
       top: 12px;
       left: 12px;
-      background: rgba(10, 14, 25, 0.75);
-      border: 1px solid rgba(140, 165, 255, 0.3);
+      background: rgba(230, 243, 255, 0.78);
+      border: 1px solid rgba(91, 145, 214, 0.45);
       border-radius: 10px;
       padding: 10px 12px;
       max-width: 360px;
@@ -20,7 +20,7 @@
       line-height: 1.35;
       font-size: 14px;
     }
-    code { color: #a8cbff; }
+    code { color: #225f9c; }
   </style>
 </head>
 <body>
@@ -39,8 +39,8 @@
 
     const container = document.getElementById('app');
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x070b12);
-    scene.fog = new THREE.Fog(0x070b12, 70, 260);
+    scene.background = new THREE.Color(0x8ac6ff);
+    scene.fog = new THREE.Fog(0x8ac6ff, 100, 300);
 
     const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1200);
     camera.position.set(130, 95, 130);
@@ -55,13 +55,13 @@
     controls.enableDamping = true;
     controls.dampingFactor = 0.06;
 
-    scene.add(new THREE.AmbientLight(0x8ca0ff, 0.45));
+    scene.add(new THREE.AmbientLight(0xbfdfff, 0.55));
 
-    const keyLight = new THREE.DirectionalLight(0xdde6ff, 1.2);
+    const keyLight = new THREE.DirectionalLight(0xffffff, 1.1);
     keyLight.position.set(80, 120, 60);
     scene.add(keyLight);
 
-    const rimLight = new THREE.DirectionalLight(0x4ca8ff, 0.45);
+    const rimLight = new THREE.DirectionalLight(0x8cc6ff, 0.5);
     rimLight.position.set(-100, 80, -50);
     scene.add(rimLight);
 
